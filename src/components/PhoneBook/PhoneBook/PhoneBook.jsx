@@ -29,10 +29,9 @@ class Phonebook extends Component {
 
   // Викликається відразу після оновлення компонента в DOM
   // Не викликається при початковому рендері компонента
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.contacts !== prevState) {
+  componentDidUpdate(_, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
       localStorage.setItem('contact', JSON.stringify(this.state.contacts));
-      console.log('Оновився масив contscts, записую contsct в сховище!');
     }
   }
 
