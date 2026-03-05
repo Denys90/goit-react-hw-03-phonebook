@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { ChangeEvent, Component, FormEvent } from 'react';
 
 import Form from '../Form/Form';
 import Filter from '../Filter/Filter';
@@ -8,7 +8,23 @@ import Title from '../Styled/Title.styled';
 import MiniTitle from '../Styled/MiniTitle.styled';
 import { nanoid } from 'nanoid';
 
-class Phonebook extends Component {
+type Contact = {
+  name: string;
+  id: string;
+  number: string;
+};
+
+interface PhonebookState {
+  contacts: Contact[];
+  filter: string;
+  name: string;
+  number: string;
+  showDeleted: boolean;
+}
+
+type StringsKeys = 'name' | 'number' | 'filter';
+
+class Phonebook extends Component<{}, PhonebookState> {
   state = {
     contacts: [],
     filter: '',
@@ -20,10 +36,9 @@ class Phonebook extends Component {
   // Викликається відразу після монтування компонента в DOM
   componentDidMount() {
     const contact = localStorage.getItem('contact');
-    const contactParsed = JSON.parse(contact);
 
-    if (contactParsed) {
-      this.setState({ contacts: contactParsed });
+    if (contact) {
+      this.setState({ contacts: JSON.parse(contact) });
     }
   }
 
@@ -35,12 +50,12 @@ class Phonebook extends Component {
     }
   }
 
-  handleChange = e => {
+  handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    this.setState({ [name]: value } as Pick<PhonebookState, StringsKeys>);
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { name, contacts } = this.state;
     if (
@@ -64,13 +79,13 @@ class Phonebook extends Component {
     }));
   };
 
-  deleteContact = id => {
+  deleteContact = (id: string) => {
     this.setState(prevState => ({
       contacts: prevState.contacts.filter(contact => contact.id !== id),
     }));
   };
 
-  filter = value => {
+  filter = (value: string) => {
     this.setState({ filter: value });
   };
 
