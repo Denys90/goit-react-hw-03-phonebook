@@ -1,8 +1,18 @@
-import React from 'react';
 import List from '../Styled/List.srtled';
 import { MdDeleteForever } from 'react-icons/md';
 
-function ContactList({ contacts, deleteContact }) {
+type Contact = {
+  name: string;
+  id: string;
+  number: string;
+};
+
+type ContactListProps = {
+  contacts: Contact[];
+  deleteContact: (id: string) => void;
+};
+
+function ContactList({ contacts, deleteContact }: ContactListProps) {
   return (
     <List>
       {contacts.map(contact => (
